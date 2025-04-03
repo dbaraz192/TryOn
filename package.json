@@ -14,6 +14,7 @@
     "auth:generate": "pnpm dlx @better-auth/cli@latest generate --y --output ./src/lib/server/schema/auth.schema.ts && prettier --write ./src/lib/server/schema/auth.schema.ts"
   },
   "dependencies": {
+    "@radix-ui/react-popover": "^1.1.6",
     "@radix-ui/react-slot": "^1.1.2",
     "@tanstack/react-query": "^5.69.0",
     "@tanstack/react-query-devtools": "^5.69.0",
@@ -21,12 +22,14 @@
     "@tanstack/react-router-devtools": "^1.114.29",
     "@tanstack/react-router-with-query": "^1.114.29",
     "@tanstack/react-start": "^1.114.29",
+    "@types/pg": "^8.11.11",
     "@vitejs/plugin-react": "^4.3.4",
     "better-auth": "^1.2.5",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.41.0",
     "lucide-react": "^0.484.0",
+    "pg": "^8.14.1",
     "postgres": "^3.4.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

@@ -24,20 +24,15 @@ function AuthPage() {
         Logo here
         <div className="flex flex-col gap-2">
           <SignInButton
-            provider="discord"
-            label="Discord"
-            className="bg-[#5865F2] hover:bg-[#5865F2]/80"
-          />
-          <SignInButton
             provider="github"
             label="GitHub"
             className="bg-neutral-700 hover:bg-neutral-700/80"
           />
-          <SignInButton
+          {/* <SignInButton
             provider="google"
             label="Google"
             className="bg-[#DB4437] hover:bg-[#DB4437]/80"
-          />
+          /> */}
         </div>
       </div>
     </div>
@@ -52,10 +47,10 @@ interface SignInButtonProps extends ComponentProps<typeof Button> {
 function SignInButton({ provider, label, className, ...props }: SignInButtonProps) {
   return (
     <Button
-      onClick={() =>
-        authClient.signIn.social({
+      onClick={async () =>
+        await authClient.signIn.social({
           provider,
-          callbackURL: REDIRECT_URL,
+          // callbackURL: REDIRECT_URL,
         })
       }
       type="button"
