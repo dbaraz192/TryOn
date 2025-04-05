@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { Button } from "~/lib/components/ui/button";
-// import { Label } from "~/lib/components/ui/label";
 import { Card, CardContent } from "~/lib/components/ui/card";
-import { UploadButton } from "~/lib/utils/uploadthing";
-import { CheckCircle } from "lucide-react";
+import { UploadDropzone } from "~/lib/utils/uploadthing";
 
 const UploadComponent = () => {
   const [images, setImages] = useState<{ [key: string]: string | null }>({
@@ -13,11 +11,12 @@ const UploadComponent = () => {
     clothing: null,
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleUploadComplete = (res: any, type: string) => {
+
+  const handleUploadComplete = (res: Array<{ url: string }>, type: string) => {
+    console.log("Upload complete:", res);
     if (res?.length > 0) {
       setImages((prev) => ({ ...prev, [type]: res[0].url }));
-    }
+    } 
   };
 
   const handleSubmit = () => {
@@ -30,25 +29,27 @@ const UploadComponent = () => {
       <div className="grid grid-cols-2 gap-4">
         {Object.keys(images).map((type) => (
           <Card key={type} className="flex items-center justify-center">
-            <CardContent className="flex flex-col items-center gap-2 p-2">
+            <CardContent className="flex flex-col items-center justify-between gap-3 w-76 h-72 mb-2 px-3">
               {images[type] ? (
-                <div className="relative w-full h-full flex flex-col items-center justify-center">
                   <img
                     src={images[type]!}
                     alt={type}
-                    className="w-full h-full object-cover rounded-md"
+                    className="rounded-lg mt-3 w-full object-cover h-9/10"
                   />
-                  <CheckCircle className="absolute top-2 right-2 text-green-500" size={20} />
-                </div>
               ) : (
-                <>
-                  <span className="text-sm text-gray-500">{type.toUpperCase()}</span>
-                  <UploadButton
+                  <UploadDropzone
                     endpoint="imageUploader"
                     onClientUploadComplete={(res) => handleUploadComplete(res, type)}
+                    onUploadError={(error: Error) => {
+                      alert(`ERROR! ${error.message}`);
+                    }}
+                    onUploadBegin={(name) => {
+                      console.log("Uploading: ", name);
+                    }}
+                    className="max-w-full h-9/10 !mt-3 bg-white"
                   />
-                </>
               )}
+              <span className="text-sm text-gray-500 font-medium">{type.toUpperCase()}</span>
             </CardContent>
           </Card>
         ))}

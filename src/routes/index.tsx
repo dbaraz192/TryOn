@@ -14,7 +14,7 @@ function Home() {
   const { user } = Route.useLoaderData();
 
   return (
-    <div className="flex flex-col gap-4 p-6">
+    <div className="flex flex-col">
       <Header user={user} queryClient={queryClient} />
       <UploadComponent />
     </div>

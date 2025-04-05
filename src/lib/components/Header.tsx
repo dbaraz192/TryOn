@@ -31,7 +31,7 @@ function Header({ user, queryClient }: HeaderProps) {
   const router = useRouter();
 
   return (
-    <header className="flex justify-between items-center w-full p-4 border-b">
+    <header className="flex justify-between items-center w-full p-4 border-b bg-white dark:bg-gray-900 shadow-md">
       <h1 className="text-4xl font-bold">TryOn</h1>
       <div className="flex items-center gap-4">
         <ThemeToggle />
