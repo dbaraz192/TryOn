@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "~/lib/components/ui/button";
 import { Card, CardContent } from "~/lib/components/ui/card";
 import { UploadDropzone } from "~/lib/utils/uploadthing";
+import { uploadUserImages } from "../server/controllers/images";
 
 const UploadComponent = () => {
   const [images, setImages] = useState<{ [key: string]: string | null }>({
@@ -11,7 +12,6 @@ const UploadComponent = () => {
     clothing: null,
   });
 
-
   const handleUploadComplete = (res: Array<{ url: string }>, type: string) => {
     console.log("Upload complete:", res);
     if (res?.length > 0) {
@@ -19,8 +19,19 @@ const UploadComponent = () => {
     } 
   };
 
-  const handleSubmit = () => {
-    console.log("Uploaded images:", images);
+  const isSubmitDisabled = Object.values(images).some((image) => image === null);
+
+  const handleSubmit = async () => {
+    if (images.front && images.back && images.side && images.clothing) {
+      await uploadUserImages({
+        data: {
+          frontUrl: images.front,
+          backUrl: images.back,
+          sideUrl: images.side,
+          clothingUrl: images.clothing,
+        }
+      })
+    }
   };
 
   return (
@@ -54,7 +65,7 @@ const UploadComponent = () => {
           </Card>
         ))}
       </div>
-      <Button onClick={handleSubmit} className="w-fit">Generate Outfit</Button>
+      <Button disabled={isSubmitDisabled} onClick={handleSubmit} className="w-fit">Next</Button>
     </div>
   );
 };
