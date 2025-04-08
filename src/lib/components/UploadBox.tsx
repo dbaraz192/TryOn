@@ -1,11 +1,11 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "~/lib/components/ui/button";
 import { Card, CardContent } from "~/lib/components/ui/card";
 import { UploadDropzone } from "~/lib/utils/uploadthing";
-import { getUserImages, uploadUserImages } from "../server/controllers/images";
+import { uploadUserImages } from "../server/controllers/images";
 import { UserImagesRow } from "../server/schema";
 
 type UploadData = {
@@ -14,7 +14,7 @@ type UploadData = {
     | null;
 };
 
-const UploadComponent = () => {
+const UploadBox = () => {
   const [images, setImages] = useState<UploadData>({
     frontUrl: null,
     backUrl: null,
@@ -28,25 +28,6 @@ const UploadComponent = () => {
       setImages((prev) => ({ ...prev, [type]: res[0].url }));
     }
   };
-
-  const { data } = useQuery({
-    queryKey: ["userImages"],
-    queryFn: async () => await getUserImages(),
-  });
-
-  useEffect(() => {
-    if (data) {
-      setImages((prev) => {
-        return {
-          ...prev,
-          frontUrl: data.frontUrl,
-          backUrl: data.backUrl,
-          rightSideUrl: data.rightSideUrl,
-          leftSideUrl: data.leftSideUrl,
-        };
-      });
-    }
-  }, [data]);
 
   const { mutate: handleSubmit, isPending } = useMutation({
     mutationFn: async () => {
@@ -110,4 +91,4 @@ const UploadComponent = () => {
   );
 };
 
-export default UploadComponent;
+export default UploadBox;
