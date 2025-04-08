@@ -40,11 +40,7 @@ export const uploadUserImages = createServerFn({ method: "POST" })
 export const getUserImages = createServerFn({ method: "GET" })
   .middleware([authMiddleware])
   .handler(async ({ context: { user } }) => {
-    const [data] = await db
-      .select()
-      .from(userImages)
-      .where(eq(userImages.userId, user.id))
-      .limit(1);
-
-    return data;
+    const data = await db.select().from(userImages).where(eq(userImages.userId, user.id));
+    if (data.length === 0) return null;
+    return data[0];
   });
