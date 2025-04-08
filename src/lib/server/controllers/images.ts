@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { authMiddleware } from "~/lib/middleware/auth-guard";
 import { db } from "~/lib/server/db";
@@ -35,3 +36,15 @@ export const uploadUserImages = createServerFn({ method: "POST" })
       };
     },
   );
+
+export const getUserImages = createServerFn({ method: "GET" })
+  .middleware([authMiddleware])
+  .handler(async ({ context: { user } }) => {
+    const [data] = await db
+      .select()
+      .from(userImages)
+      .where(eq(userImages.userId, user.id))
+      .limit(1);
+
+    return data;
+  });
