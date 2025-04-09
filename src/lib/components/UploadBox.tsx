@@ -22,10 +22,10 @@ const UploadBox = () => {
     leftSideUrl: null,
   });
 
-  const handleUploadComplete = (res: Array<{ url: string }>, type: string) => {
+  const handleUploadComplete = (res: Array<{ ufsUrl: string }>, type: string) => {
     console.log("Upload complete:", res);
     if (res?.length > 0) {
-      setImages((prev) => ({ ...prev, [type]: res[0].url }));
+      setImages((prev) => ({ ...prev, [type]: res[0].ufsUrl }));
     }
   };
 

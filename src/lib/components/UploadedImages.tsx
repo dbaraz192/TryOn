@@ -1,5 +1,7 @@
-import { ImageCard } from "~/lib/components/ImageCard";
+"use client";
+
 import { Button } from "~/lib/components/ui/button";
+import { EditImage } from "./EditImage";
 
 type Props = {
   data: {
@@ -18,6 +20,7 @@ const imageData = [
 ] as const;
 
 const UploadedImages = ({ data }: Props) => {
+
   return (
     <div className="flex flex-col items-center gap-6 p-6">
       <h1 className="text-2xl font-bold">Your Images</h1>
@@ -25,11 +28,16 @@ const UploadedImages = ({ data }: Props) => {
         {imageData.map(({ key, label }) => {
           const imageUrl = data[key];
           return imageUrl ? (
-            <ImageCard key={key} imageUrl={imageUrl} label={label} />
+            <EditImage
+              key={key}
+              type={key}
+              label={label}
+              imageUrl={imageUrl}
+            />
           ) : null;
         })}
       </div>
-      <Button>Next</Button>
+      <Button>Generate</Button>
     </div>
   );
 };

@@ -12,6 +12,16 @@ const UploadUserImagesSschema = z.object({
   leftSideUrl: z.string(),
 });
 
+const UpdateUserImagesSchema = z.object({
+  type: z.union([
+    z.literal("frontUrl"),
+    z.literal("backUrl"),
+    z.literal("rightSideUrl"),
+    z.literal("leftSideUrl"),
+  ]),
+  url: z.string(),
+});
+
 export const uploadUserImages = createServerFn({ method: "POST" })
   .validator(UploadUserImagesSschema)
   .middleware([authMiddleware])
@@ -36,6 +46,17 @@ export const uploadUserImages = createServerFn({ method: "POST" })
       };
     },
   );
+
+export const updateUserImage = createServerFn({ method: "POST" })
+  .validator(UpdateUserImagesSchema)
+  .middleware([authMiddleware])
+  .handler(async ({ data: { type, url }, context: { user } }) => {
+    return await db
+      .update(userImages)
+      .set({ [type]: url })
+      .where(eq(userImages.userId, user.id))
+      .returning();
+  });
 
 export const getUserImages = createServerFn({ method: "GET" })
   .middleware([authMiddleware])

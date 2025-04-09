@@ -6,7 +6,7 @@ type ImageCardProps = {
 };
 
 export const ImageCard = ({ imageUrl, label }: ImageCardProps) => (
-  <Card className="flex items-center justify-center">
+  <Card className="flex items-center justify-center relative">
     <CardContent className="mb-2 flex h-72 w-76 flex-col items-center justify-between gap-3 px-3">
       <img
         src={imageUrl}
