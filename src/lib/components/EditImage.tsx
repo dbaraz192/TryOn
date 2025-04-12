@@ -17,26 +17,34 @@ export const EditImage = ({ type, imageUrl, label }: EditImageProps) => {
 
   const handleUploadComplete = async (res: Array<{ ufsUrl: string }>) => {
     console.log("Upload complete:", res);
-    if (res?.length > 0) {
-      setImage(res[0].ufsUrl);
-      submitImageUpdate();
-    };
+    if (res?.length > 0 && type) {
+      const uploadedUrl = res[0].ufsUrl;
+      setImage(uploadedUrl);
+      submitImageUpdate({
+        data: {
+          type: type,
+          url: uploadedUrl,
+        },
+      });
+    }
   };
 
   const { mutate: submitImageUpdate } = useMutation({
-    mutationFn: async () => {
-      if (image && type ) {
-        await updateUserImage({
-          data: {
-            type: type,
-            url: image,
-          },
-        });
-      } else throw new Error("Image must be uploaded");
+    mutationFn: async ({
+      data,
+    }: {
+      data: {
+        type: EditImageProps["type"];
+        url: string;
+      };
+    }) => {
+      return await updateUserImage({ data });
     },
     onSuccess: () => toast.success("Images uploaded successfully!"),
-    onError: (error) => toast.error(`Error uploading images: ${error.message}`),
+    onError: (error) =>
+      toast.error(`Error uploading images: ${error.message}`),
   });
+  
 
   return (
     <Card className="flex items-center justify-center relative">

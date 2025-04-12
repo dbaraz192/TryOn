@@ -51,6 +51,7 @@ export const updateUserImage = createServerFn({ method: "POST" })
   .validator(UpdateUserImagesSchema)
   .middleware([authMiddleware])
   .handler(async ({ data: { type, url }, context: { user } }) => {
+    console.log("Updating user image:", type, url);
     return await db
       .update(userImages)
       .set({ [type]: url })
