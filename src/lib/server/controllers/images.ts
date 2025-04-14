@@ -5,7 +5,7 @@ import { authMiddleware } from "~/lib/middleware/auth-guard";
 import { db } from "~/lib/server/db";
 import { userImages } from "../schema";
 
-const UploadUserImagesSschema = z.object({
+const UploadUserImagesSchema = z.object({
   frontUrl: z.string(),
   backUrl: z.string(),
   rightSideUrl: z.string(),
@@ -23,7 +23,7 @@ const UpdateUserImagesSchema = z.object({
 });
 
 export const uploadUserImages = createServerFn({ method: "POST" })
-  .validator(UploadUserImagesSschema)
+  .validator(UploadUserImagesSchema)
   .middleware([authMiddleware])
   .handler(
     async ({

@@ -5,12 +5,14 @@ import { Card, CardContent } from "./ui/card";
 import { useMutation } from "@tanstack/react-query";
 import { updateUserImage } from "../server/controllers/images";
 import { toast } from "sonner";
+import { Edit } from "lucide-react";
 
 interface EditImageProps {
   type: 'frontUrl' | 'backUrl' | 'rightSideUrl' | 'leftSideUrl';
   imageUrl: string | null;
   label: string;
 };
+
 
 export const EditImage = ({ type, imageUrl, label }: EditImageProps) => {
   const [image, setImage] = useState(imageUrl);
@@ -50,13 +52,14 @@ export const EditImage = ({ type, imageUrl, label }: EditImageProps) => {
     <Card className="flex items-center justify-center relative">
       <CardContent className="mb-2 flex h-72 w-76 flex-col items-center justify-between gap-3 px-3">
       {image && (
+        <>
         <div className="relative h-full w-full">
           <img
             src={image}
             alt={type}
             className="mt-3 h-9/10 w-full rounded-lg object-cover"
           />
-          <UploadButton<UploadRouter>
+          <UploadButton<UploadRouter, "imageUploader">
             endpoint="imageUploader"
             onClientUploadComplete={(res) => handleUploadComplete(res)}
             onUploadError={(error) => {
@@ -65,19 +68,36 @@ export const EditImage = ({ type, imageUrl, label }: EditImageProps) => {
             onUploadBegin={(name) => {
               console.log("Uploading: ", name);
             }}
-            className="absolute top-5 right-2 text-white"
+            className="absolute top-5 flex flex-col items-end right-2 text-white"
+            content={{
+              button({ ready }) {
+                if (ready) return <Edit />;
+                return "Getting ready...";
+              },
+              allowedContent({ ready, fileTypes, isUploading }) {
+                if (!ready) return "Checking what you allow";
+                if (isUploading) return "Your photo is uploading";
+                return `Stuff you can upload: ${fileTypes.join(", ")}`;
+              },
+            }}
             appearance={{
               button: {
                 background: "black",
                 color: "white",
+                width: "40px"
               },
               container: {
                 display: "flex",
                 background: "transparent",
             }}
+            
+            
             }
           />
         </div>
+      </>
+      
+        
       )}
       <span className="text-sm font-medium text-gray-500">
         {label.toUpperCase()}
@@ -85,4 +105,4 @@ export const EditImage = ({ type, imageUrl, label }: EditImageProps) => {
       </CardContent>
     </Card>
   );
-}
+};
