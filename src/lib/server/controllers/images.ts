@@ -3,7 +3,9 @@ import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { authMiddleware } from "~/lib/middleware/auth-guard";
 import { db } from "~/lib/server/db";
+import { getUploadThingFileKey } from "~/lib/utils/uploadthing";
 import { userImages } from "../schema";
+import { utapi } from "../uploadthing";
 
 const UploadUserImagesSchema = z.object({
   frontUrl: z.string().url(),
@@ -49,11 +51,20 @@ export const updateUserImage = createServerFn({ method: "POST" })
   .middleware([authMiddleware])
   .handler(async ({ data: { type, url }, context: { user } }) => {
     console.log("Updating user image:", type, url);
-    return await db
+    const [{ image }] = await db
+      .select({ image: userImages[type] })
+      .from(userImages)
+      .where(eq(userImages.userId, user.id));
+    const ret = await db
       .update(userImages)
       .set({ [type]: url })
       .where(eq(userImages.userId, user.id))
       .returning();
+    if (image) {
+      const key = getUploadThingFileKey(image);
+      if (key) await utapi.deleteFiles(key);
+    }
+    return ret;
   });
 
 export const getUserImages = createServerFn({ method: "GET" })
