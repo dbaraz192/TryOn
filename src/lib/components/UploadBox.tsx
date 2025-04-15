@@ -11,15 +11,15 @@ import { UserImagesRow } from "../server/schema";
 type UploadData = {
   [key in keyof Omit<UserImagesRow, "id" | "userId" | "createdAt" | "updatedAt">]:
     | string
-    | null;
+    | undefined;
 };
 
 const UploadBox = () => {
   const [images, setImages] = useState<UploadData>({
-    frontUrl: null,
-    backUrl: null,
-    rightSideUrl: null,
-    leftSideUrl: null,
+    frontUrl: undefined,
+    backUrl: undefined,
+    rightSideUrl: undefined,
+    leftSideUrl: undefined,
   });
 
   const handleUploadComplete = (res: Array<{ ufsUrl: string }>, type: string) => {
@@ -31,21 +31,18 @@ const UploadBox = () => {
 
   const { mutate: handleSubmit, isPending } = useMutation({
     mutationFn: async () => {
-      if (
-        images.frontUrl &&
-        images.backUrl &&
-        images.rightSideUrl &&
-        images.leftSideUrl
-      ) {
-        await uploadUserImages({
-          data: {
-            frontUrl: images.frontUrl,
-            backUrl: images.backUrl,
-            rightSideUrl: images.rightSideUrl,
-            leftSideUrl: images.leftSideUrl,
-          },
-        });
-      } else throw new Error("All four images must be uploaded");
+      const { frontUrl, backUrl, rightSideUrl, leftSideUrl } = images;
+
+      if (!frontUrl) throw new Error("Front image is required");
+
+      await uploadUserImages({
+        data: {
+          frontUrl,
+          backUrl,
+          rightSideUrl,
+          leftSideUrl,
+        },
+      });
     },
     onSuccess: () => toast.success("Images uploaded successfully!"),
     onError: (error) => toast.error(`Error uploading images: ${error.message}`),

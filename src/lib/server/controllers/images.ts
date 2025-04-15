@@ -6,20 +6,17 @@ import { db } from "~/lib/server/db";
 import { userImages } from "../schema";
 
 const UploadUserImagesSchema = z.object({
-  frontUrl: z.string(),
-  backUrl: z.string(),
-  rightSideUrl: z.string(),
-  leftSideUrl: z.string(),
+  frontUrl: z.string().url(),
+  backUrl: z.string().url().optional(),
+  rightSideUrl: z.string().url().optional(),
+  leftSideUrl: z.string().url().optional(),
 });
 
+const imageTypes = ["frontUrl", "backUrl", "rightSideUrl", "leftSideUrl"] as const;
+
 const UpdateUserImagesSchema = z.object({
-  type: z.union([
-    z.literal("frontUrl"),
-    z.literal("backUrl"),
-    z.literal("rightSideUrl"),
-    z.literal("leftSideUrl"),
-  ]),
-  url: z.string(),
+  type: z.enum(imageTypes),
+  url: z.string().url(),
 });
 
 export const uploadUserImages = createServerFn({ method: "POST" })

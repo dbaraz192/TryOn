@@ -6,6 +6,8 @@ import { useMutation } from "@tanstack/react-query";
 import { updateUserImage } from "../server/controllers/images";
 import { toast } from "sonner";
 import { Edit } from "lucide-react";
+// import { utapi } from "../server/uploadthing";
+import { getUploadThingFileKey } from "../utils/uploadthing";
 
 interface EditImageProps {
   type: 'frontUrl' | 'backUrl' | 'rightSideUrl' | 'leftSideUrl';
@@ -13,9 +15,12 @@ interface EditImageProps {
   label: string;
 };
 
-
 export const EditImage = ({ type, imageUrl, label }: EditImageProps) => {
   const [image, setImage] = useState(imageUrl);
+
+  if (image) {
+    console.log("Image URL:", getUploadThingFileKey(image));
+  }
 
   const handleUploadComplete = async (res: Array<{ ufsUrl: string }>) => {
     console.log("Upload complete:", res);
@@ -31,6 +36,7 @@ export const EditImage = ({ type, imageUrl, label }: EditImageProps) => {
     }
   };
 
+
   const { mutate: submitImageUpdate } = useMutation({
     mutationFn: async ({
       data,
@@ -42,62 +48,69 @@ export const EditImage = ({ type, imageUrl, label }: EditImageProps) => {
     }) => {
       return await updateUserImage({ data });
     },
-    onSuccess: () => toast.success("Images uploaded successfully!"),
+    onSuccess: async () => {
+      // const oldFileKey = imageUrl ? getUploadThingFileKey(imageUrl) : null;
+      // if (oldFileKey) {
+      //   try {
+      //     await utapi.deleteFiles(oldFileKey);
+      //     console.log("Old image deleted:", oldFileKey);
+      //   } catch (error) {
+      //     console.error("Failed to delete old image:", error);
+      //   }
+      // }
+  
+      toast.success("Images uploaded successfully!");
+    },
     onError: (error) =>
       toast.error(`Error uploading images: ${error.message}`),
   });
   
-
   return (
     <Card className="flex items-center justify-center relative">
-      <CardContent className="mb-2 flex h-72 w-76 flex-col items-center justify-between gap-3 px-3">
+      <CardContent className="mb-2 flex h-122 w-86 flex-col items-center justify-between gap-3 px-3">
       {image && (
         <>
-        <div className="relative h-full w-full">
-          <img
-            src={image}
-            alt={type}
-            className="mt-3 h-9/10 w-full rounded-lg object-cover"
-          />
-          <UploadButton<UploadRouter, "imageUploader">
-            endpoint="imageUploader"
-            onClientUploadComplete={(res) => handleUploadComplete(res)}
-            onUploadError={(error) => {
-              alert(`ERROR! ${error.message}`);
-            }}
-            onUploadBegin={(name) => {
-              console.log("Uploading: ", name);
-            }}
-            className="absolute top-5 flex flex-col items-end right-2 text-white"
-            content={{
-              button({ ready }) {
-                if (ready) return <Edit />;
-                return "Getting ready...";
-              },
-              allowedContent({ ready, fileTypes, isUploading }) {
-                if (!ready) return "Checking what you allow";
-                if (isUploading) return "Your photo is uploading";
-                return `Stuff you can upload: ${fileTypes.join(", ")}`;
-              },
-            }}
-            appearance={{
-              button: {
-                background: "black",
-                color: "white",
-                width: "40px"
-              },
-              container: {
-                display: "flex",
-                background: "transparent",
-            }}
-            
-            
-            }
-          />
-        </div>
-      </>
-      
-        
+          <div className="relative h-full w-full">
+            <img
+              src={image}
+              alt={type}
+              className="mt-3 h-9/10 w-full rounded-lg object-cover object-top"
+            />
+            <UploadButton<UploadRouter, "imageUploader">
+              endpoint="imageUploader"
+              onClientUploadComplete={(res) => handleUploadComplete(res)}
+              onUploadError={(error) => {
+                alert(`ERROR! ${error.message}`);
+              }}
+              onUploadBegin={(name) => {
+                console.log("Uploading: ", name);
+              }}
+              className="absolute top-5 flex flex-col items-end right-2 text-white"
+              content={{
+                button({ ready }) {
+                  if (ready) return <Edit />;
+                  return "Getting ready...";
+                },
+                allowedContent({ ready, fileTypes, isUploading }) {
+                  if (!ready) return "Checking what you allow";
+                  if (isUploading) return "Your photo is uploading";
+                  return '';
+                },
+              }}
+              appearance={{
+                button: {
+                  background: "black",
+                  color: "white",
+                  width: "40px"
+                },
+                container: {
+                  display: "flex",
+                  background: "transparent",
+                }}
+              }
+            />
+          </div>
+        </>
       )}
       <span className="text-sm font-medium text-gray-500">
         {label.toUpperCase()}
