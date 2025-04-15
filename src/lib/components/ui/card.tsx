@@ -38,6 +38,16 @@ function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
   )
 }
 
+function CardInnerTitle({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-inner-title"
+      className={cn("text-sm flex justify-center font-medium w-9/10 py-1.5 bg-white text-gray-800 dark:bg-gray-900 dark:text-white absolute bottom-1 rounded", className)}
+      {...props}
+    />
+  )
+}
+
 function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
@@ -86,6 +96,7 @@ export {
   CardHeader,
   CardFooter,
   CardTitle,
+  CardInnerTitle,
   CardAction,
   CardDescription,
   CardContent,

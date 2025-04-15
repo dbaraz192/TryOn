@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { UploadButton } from "@uploadthing/react";
 import { UploadRouter } from "../server/uploadthing";
-import { Card, CardContent } from "./ui/card";
+import { Card, CardInnerTitle } from "./ui/card";
 import { useMutation } from "@tanstack/react-query";
 import { updateUserImage } from "../server/controllers/images";
 import { toast } from "sonner";
@@ -66,15 +66,14 @@ export const EditImage = ({ type, imageUrl, label }: EditImageProps) => {
   });
   
   return (
-    <Card className="flex items-center justify-center relative">
-      <CardContent className="mb-2 flex h-122 w-86 flex-col items-center justify-between gap-3 px-3">
+    <Card className="flex items-center justify-center relative h-122 w-86">
       {image && (
         <>
           <div className="relative h-full w-full">
             <img
               src={image}
               alt={type}
-              className="mt-3 h-9/10 w-full rounded-lg object-cover object-top"
+              className="mt-3 h-full w-full rounded-lg object-cover object-top"
             />
             <UploadButton<UploadRouter, "imageUploader">
               endpoint="imageUploader"
@@ -91,7 +90,7 @@ export const EditImage = ({ type, imageUrl, label }: EditImageProps) => {
                   if (ready) return <Edit />;
                   return "Getting ready...";
                 },
-                allowedContent({ ready, fileTypes, isUploading }) {
+                allowedContent({ ready, isUploading }) {
                   if (!ready) return "Checking what you allow";
                   if (isUploading) return "Your photo is uploading";
                   return '';
@@ -112,10 +111,9 @@ export const EditImage = ({ type, imageUrl, label }: EditImageProps) => {
           </div>
         </>
       )}
-      <span className="text-sm font-medium text-gray-500">
+      <CardInnerTitle>
         {label.toUpperCase()}
-      </span>
-      </CardContent>
+      </CardInnerTitle>
     </Card>
   );
 };
