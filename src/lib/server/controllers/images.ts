@@ -14,11 +14,17 @@ const UploadUserImagesSchema = z.object({
   leftSideUrl: z.string().url().optional(),
 });
 
-const imageTypes = ["frontUrl", "backUrl", "rightSideUrl", "leftSideUrl"] as const;
+const optionalImageUrl = ["backUrl", "rightSideUrl", "leftSideUrl"] as const;
+
+const imageTypes = ["frontUrl", ...optionalImageUrl] as const;
 
 const UpdateUserImagesSchema = z.object({
   type: z.enum(imageTypes),
   url: z.string().url(),
+});
+
+const DeleteUserImagesSchema = z.object({
+  type: z.enum(optionalImageUrl),
 });
 
 export const uploadUserImages = createServerFn({ method: "POST" })
@@ -65,6 +71,25 @@ export const updateUserImage = createServerFn({ method: "POST" })
       if (key) await utapi.deleteFiles(key);
     }
     return ret;
+  });
+
+export const deleteUserImage = createServerFn({ method: "POST" })
+  .validator(DeleteUserImagesSchema)
+  .middleware([authMiddleware])
+  .handler(async ({ data: { type }, context: { user } }) => {
+    console.log("Deleting user image:", type);
+    const [{ image }] = await db
+      .select({ image: userImages[type] })
+      .from(userImages)
+      .where(eq(userImages.userId, user.id));
+    await db
+      .update(userImages)
+      .set({ [type]: null })
+      .where(eq(userImages.userId, user.id));
+    if (image) {
+      const key = getUploadThingFileKey(image);
+      if (key) await utapi.deleteFiles(key);
+    }
   });
 
 export const getUserImages = createServerFn({ method: "GET" })

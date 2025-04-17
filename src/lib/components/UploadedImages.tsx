@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "~/lib/components/ui/button";
-import { EditImage } from "./EditImage";
+import { ModifyImage } from "./ModifyImage";
 // import { Loader } from "lucide-react";
 
 type Props = {
@@ -31,12 +31,7 @@ const UploadedImages = ({ data }: Props) => {
         {imageData.map(({ key, label }) => {
           const imageUrl = data[key];
           return imageUrl ? (
-            <EditImage
-              key={key}
-              type={key}
-              label={label}
-              imageUrl={imageUrl}
-            />
+            <ModifyImage key={key} type={key} label={label} imageUrl={imageUrl} />
           ) : null;
         })}
       </div>

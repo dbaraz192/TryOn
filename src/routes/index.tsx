@@ -1,9 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
-import UploadBox from "~/lib/components/UploadBox";
-import Header from "~/lib/components/Header";
 import { useQuery } from "@tanstack/react-query";
-import { getUserImages } from "~/lib/server/controllers/images";
+import { createFileRoute } from "@tanstack/react-router";
+import Header from "~/lib/components/Header";
+import UploadBox from "~/lib/components/UploadBox";
 import UploadedImages from "~/lib/components/UploadedImages";
+import { getUserImages } from "~/lib/server/controllers/images";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -20,15 +20,11 @@ function Home() {
     queryKey: ["userImages"],
     queryFn: async () => await getUserImages(),
   });
-  
+
   return (
     <div className="flex flex-col">
       <Header user={user} queryClient={queryClient} />
-      {data ? (
-        <UploadedImages data={data} />
-      ) : (
-        <UploadBox />
-      )}
+      {data ? <UploadedImages data={data} /> : <UploadBox />}
     </div>
   );
-};
+}
