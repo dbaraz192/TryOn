@@ -1,4 +1,4 @@
-import { Card, CardContent } from "~/lib/components/ui/card";
+import { CardContent, CardImage } from "~/lib/components/ui/card";
 
 type ImageCardProps = {
   imageUrl: string;
@@ -6,7 +6,7 @@ type ImageCardProps = {
 };
 
 export const ImageCard = ({ imageUrl, label }: ImageCardProps) => (
-  <Card className="relative flex items-center justify-center">
+  <CardImage>
     <CardContent className="mb-2 flex h-72 w-76 flex-col items-center justify-between gap-3 px-3">
       <img
         src={imageUrl}
@@ -15,5 +15,5 @@ export const ImageCard = ({ imageUrl, label }: ImageCardProps) => (
       />
       <span className="text-sm font-medium text-gray-500">{label.toUpperCase()}</span>
     </CardContent>
-  </Card>
+  </CardImage>
 );

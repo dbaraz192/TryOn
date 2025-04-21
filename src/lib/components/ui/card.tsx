@@ -12,6 +12,19 @@ function Card({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
+function CardImage({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card"
+      className={cn(
+        "relative flex max-w-full flex-col items-center justify-center rounded-lg border border-dashed border-gray-900/25 bg-white text-center dark:bg-gray-900",
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
 function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
@@ -40,7 +53,7 @@ function CardInnerTitle({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card-inner-title"
       className={cn(
-        "absolute bottom-1 flex w-9/10 justify-center rounded bg-white py-1.5 text-sm font-medium text-gray-800 dark:bg-gray-900 dark:text-white",
+        "absolute bottom-2 flex w-9/10 justify-center rounded bg-white py-1.5 text-sm font-medium text-gray-800 dark:bg-gray-900 dark:text-white",
         className,
       )}
       {...props}
@@ -92,6 +105,7 @@ export {
   CardDescription,
   CardFooter,
   CardHeader,
+  CardImage,
   CardInnerTitle,
   CardTitle,
 };

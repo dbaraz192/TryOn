@@ -3,7 +3,7 @@ import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "~/lib/components/ui/button";
-import { Card, CardContent } from "~/lib/components/ui/card";
+import { CardContent, CardImage } from "~/lib/components/ui/card";
 import { UploadDropzone } from "~/lib/utils/uploadthing";
 import { uploadUserImages } from "../server/controllers/images";
 import { UserImagesRow } from "../server/schema";
@@ -53,7 +53,7 @@ const UploadBox = () => {
       <h1 className="text-2xl font-bold">Upload Your Images</h1>
       <div className="grid grid-cols-2 gap-4">
         {Object.entries(images).map(([type, image]) => (
-          <Card key={type} className="flex items-center justify-center">
+          <CardImage key={type}>
             <CardContent className="mb-2 flex h-72 w-76 flex-col items-center justify-between gap-3 px-3">
               {image ? (
                 <img
@@ -66,7 +66,7 @@ const UploadBox = () => {
                   endpoint="imageUploader"
                   onClientUploadComplete={(res) => handleUploadComplete(res, type)}
                   onUploadError={(error: Error) => {
-                    alert(`ERROR! ${error.message}`);
+                    toast.error(error.message);
                   }}
                   onUploadBegin={(name) => {
                     console.log("Uploading: ", name);
@@ -78,7 +78,7 @@ const UploadBox = () => {
                 {type.toUpperCase()}
               </span>
             </CardContent>
-          </Card>
+          </CardImage>
         ))}
       </div>
       <Button onClick={() => handleSubmit()} className="w-fit">
