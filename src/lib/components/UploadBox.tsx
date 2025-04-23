@@ -77,7 +77,7 @@ const UploadBox = () => {
                 onUploadBegin={(name) => {
                   console.log("Uploading: ", name);
                 }}
-                className="!mt-3 h-9/10 max-w-full bg-white dark:bg-gray-900"
+                className="upload-dropzone"
               />
             )}
           </div>
