@@ -16,7 +16,7 @@ function Home() {
   const { queryClient } = Route.useRouteContext();
   const { user } = Route.useLoaderData();
 
-  const { data } = useQuery({
+  const { isLoading, data } = useQuery({
     queryKey: ["userImages"],
     queryFn: async () => await getUserImages(),
   });
@@ -24,7 +24,7 @@ function Home() {
   return (
     <div className="flex flex-col">
       <Header user={user} queryClient={queryClient} />
-      {data ? <UploadedImages data={data} /> : <UploadBox />}
+      {data ? <UploadedImages data={data} isLoading={isLoading} /> : <UploadBox />}
     </div>
   );
 }

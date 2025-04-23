@@ -27,8 +27,8 @@ function Header({ user, queryClient }: HeaderProps) {
   const router = useRouter();
 
   return (
-    <header className="flex w-full items-center justify-between border-b bg-white p-4 shadow-md dark:bg-gray-900">
-      <h1 className="text-4xl font-bold">TryOn</h1>
+    <header className="flex w-full items-center justify-between border-b bg-white px-4 py-3 shadow-md dark:bg-gray-900">
+      <h1 className="text-3xl font-bold">TryOn</h1>
       <div className="flex items-center gap-4">
         <ThemeToggle />
         {user ? (
