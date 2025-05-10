@@ -1,4 +1,5 @@
 import type { QueryClient } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
   createRootRouteWithContext,
   HeadContent,
@@ -6,11 +7,10 @@ import {
   ScriptOnce,
   Scripts,
 } from "@tanstack/react-router";
+import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { createServerFn } from "@tanstack/react-start";
 import { getWebRequest } from "@tanstack/react-start/server";
-
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+import { Toaster } from "sonner";
 
 import { auth } from "~/lib/server/auth";
 import appCss from "~/lib/styles/app.css?url";
@@ -43,7 +43,7 @@ export const Route = createRootRouteWithContext<{
         content: "width=device-width, initial-scale=1",
       },
       {
-        title: "React TanStarter",
+        title: "TryOn",
       },
     ],
     links: [{ rel: "stylesheet", href: appCss }],
@@ -55,6 +55,7 @@ function RootComponent() {
   return (
     <RootDocument>
       <Outlet />
+      <Toaster />
     </RootDocument>
   );
 }

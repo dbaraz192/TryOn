@@ -1,15 +1,11 @@
 import { Link } from "@tanstack/react-router";
 import authClient from "~/lib/auth-client";
 import ThemeToggle from "~/lib/components/ThemeToggle";
-import { Button } from "~/lib/components/ui/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "~/lib/components/ui/popover";
 import { Avatar, AvatarFallback, AvatarImage } from "~/lib/components/ui/avatar";
+import { Button } from "~/lib/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "~/lib/components/ui/popover";
 
-import { QueryClient } from '@tanstack/react-query';
+import { QueryClient } from "@tanstack/react-query";
 import { useRouter } from "@tanstack/react-router";
 
 type User = {
@@ -31,8 +27,8 @@ function Header({ user, queryClient }: HeaderProps) {
   const router = useRouter();
 
   return (
-    <header className="flex justify-between items-center w-full p-4 border-b bg-white dark:bg-gray-900 shadow-md">
-      <h1 className="text-4xl font-bold">TryOn</h1>
+    <header className="flex w-full items-center justify-between border-b bg-white px-4 py-3 shadow-md dark:bg-gray-900">
+      <h1 className="text-3xl font-bold">TryOn</h1>
       <div className="flex items-center gap-4">
         <ThemeToggle />
         {user ? (
@@ -46,11 +42,11 @@ function Header({ user, queryClient }: HeaderProps) {
               </Button>
             </PopoverTrigger>
             <PopoverContent className="divide-y divide-gray-100">
-              <div className="px-4 py-3 space-y-2">
+              <div className="space-y-2 px-4 py-3">
                 <p className="text-sm font-medium text-gray-900 dark:text-white">
                   {user.name}
                 </p>
-                <p className="text-xs text-gray-500 truncate dark:text-gray-400">
+                <p className="truncate text-xs text-gray-500 dark:text-gray-400">
                   {user.email}
                 </p>
               </div>
@@ -58,7 +54,7 @@ function Header({ user, queryClient }: HeaderProps) {
                 <li>
                   <Link
                     to="/dashboard"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
                   >
                     Dashboard
                   </Link>
@@ -72,7 +68,7 @@ function Header({ user, queryClient }: HeaderProps) {
                     }}
                     type="button"
                     variant="ghost"
-                    className="w-full rounded-none justify-start px-4"
+                    className="w-full justify-start rounded-none px-4"
                   >
                     Sign out
                   </Button>
@@ -88,6 +84,6 @@ function Header({ user, queryClient }: HeaderProps) {
       </div>
     </header>
   );
-};
+}
 
 export default Header;

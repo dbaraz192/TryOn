@@ -122,4 +122,8 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  .upload-dropzone {
+    @apply !mt-3 h-9/10 max-w-full bg-white dark:bg-gray-900;
+  }
 }
